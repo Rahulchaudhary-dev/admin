@@ -1,12 +1,11 @@
 import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ErrorMessage from '../../components/ErrorMessage';
-import { useLogin } from './hooks/useLogin';
-
+import { useLogin } from '../../hooks/useLogin';
 interface IFormInput {
   email: string;
   password: string;
@@ -19,7 +18,7 @@ const Login: React.FC = () => {
     formState: { errors },
   } = useForm<IFormInput>();
   const { mutate: login } = useLogin();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit = (data: IFormInput) => {
     login({
       email: data.email,
       password: data.password,

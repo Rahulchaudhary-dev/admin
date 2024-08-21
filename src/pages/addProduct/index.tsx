@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -15,7 +15,6 @@ import {
 import { DashboardLayout } from '@components/layout';
 import axios from 'axios';
 
-// Validation schema using Yup
 const schema = yup.object().shape({
   name: yup.string().required('Product name is required'),
   total_tasks: yup
@@ -43,15 +42,13 @@ const AddProduct = () => {
   });
 
   const [imageId, setImageId] = useState('');
-  const [imagePreview, setImagePreview] = useState(null); // State for image preview
+  const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  // Handle image upload
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Show image preview
     setImagePreview(URL.createObjectURL(file));
 
     const formData = new FormData();
@@ -60,7 +57,6 @@ const AddProduct = () => {
     try {
       setUploading(true);
 
-      // Replace with your actual image upload API endpoint
       const response = await axios.post('/api/upload-image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -69,7 +65,7 @@ const AddProduct = () => {
 
       const { data } = response;
       if (data && data.image_id) {
-        setImageId(data.image_id); // Store the image_id in the state
+        setImageId(data.image_id);
         alert('Image uploaded successfully');
       }
     } catch (error) {
@@ -88,17 +84,16 @@ const AddProduct = () => {
 
     const formData = {
       ...data,
-      image_id: imageId, // Include the image_id from the upload
+      image_id: imageId,
     };
 
     try {
-      // Make POST request to the API
       const response = await axios.post('/api/products', formData);
       if (response.status === 200) {
         alert('Product added successfully');
-        reset(); // Reset form after successful submission
-        setImageId(''); // Clear image_id after submission
-        setImagePreview(null); // Clear image preview after submission
+        reset();
+        setImageId('');
+        setImagePreview(null);
       }
     } catch (error) {
       console.error('Error adding product:', error);
@@ -157,7 +152,6 @@ const AddProduct = () => {
               />
             </Grid>
 
-            {/* Image Upload Field */}
             <Grid item xs={12}>
               <Typography variant='subtitle1' gutterBottom>
                 Upload Product Image
@@ -166,9 +160,9 @@ const AddProduct = () => {
                 variant='contained'
                 component='label'
                 sx={{
-                  backgroundColor: '#87CEEB', // Sky blue button
+                  backgroundColor: '#87CEEB',
                   '&:hover': {
-                    backgroundColor: '#00BFFF', // Darker sky blue on hover
+                    backgroundColor: '#00BFFF',
                   },
                 }}
                 disabled={uploading}
@@ -182,7 +176,6 @@ const AddProduct = () => {
                 />
               </Button>
 
-              {/* Show image preview */}
               {imagePreview && (
                 <Box mt={2}>
                   <Typography variant='subtitle2' gutterBottom>
@@ -227,11 +220,11 @@ const AddProduct = () => {
                 variant='contained'
                 color='primary'
                 sx={{
-                  backgroundColor: '#87CEEB', // Sky blue button
+                  backgroundColor: '#87CEEB',
                   '&:hover': {
-                    backgroundColor: '#00BFFF', // Darker sky blue on hover
+                    backgroundColor: '#00BFFF',
                   },
-                  width: '100%', // Ensure the button is full width but compact
+                  width: '100%',
                 }}
               >
                 Add Product

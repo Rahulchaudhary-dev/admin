@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -12,7 +12,6 @@ import {
   Typography,
   Avatar,
   CircularProgress,
-  Button, // Import Button for styling purposes
 } from '@mui/material';
 import { DashboardLayout } from '@components/layout';
 
@@ -25,13 +24,12 @@ const ProductList = () => {
   const fetchProducts = async (pageNumber) => {
     setLoading(true);
     try {
-      // Simulating a delay to mimic an API request
       setTimeout(() => {
         const dummyResponse = {
           statusCode: 200,
           message: 'Request Done Successfully',
-          totalItems: 5, // Assuming a total of 5 products
-          pageSize: 2, // Assuming 2 products per page
+          totalItems: 5,
+          pageSize: 2,
           data: [
             {
               name: 'Wazirx',
@@ -67,7 +65,7 @@ const ProductList = () => {
           );
         }
         setLoading(false);
-      }, 1000); // Simulate a 1-second delay for the "API call"
+      }, 1000);
     } catch (error) {
       console.error('Error fetching products:', error);
       setLoading(false);
@@ -89,7 +87,6 @@ const ProductList = () => {
           Product List
         </Typography>
 
-        {/* Show loading spinner while data is being fetched */}
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
             <CircularProgress />
