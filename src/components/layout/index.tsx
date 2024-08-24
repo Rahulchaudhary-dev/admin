@@ -15,6 +15,8 @@ import {
 import LogoutIcon from '@mui/icons-material/Logout';
 import ListIcon from '@mui/icons-material/List';
 import AddIcon from '@mui/icons-material/Add';
+import useLocalStorage from '@hooks/useLocalStorage';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -27,7 +29,14 @@ const pageTitles = {
 
 // Dashboard Layout Component that accepts children
 export const DashboardLayout = ({ children }: any) => {
+  const navigate = useNavigate();
   const location = useLocation();
+  const [authToken, setToken] = useLocalStorage<string>('jwtToken', '');
+
+  const handleLogout = () => {
+    setToken('');
+    navigate('/');
+  };
 
   // Get the dynamic title based on the current route, default to "Dashboard"
   const currentPageTitle = pageTitles[location.pathname] || 'Dashboard';
@@ -82,7 +91,7 @@ export const DashboardLayout = ({ children }: any) => {
               </ListItemIcon>
               <ListItemText primary='Add Product' />
             </ListItem>
-            <ListItem button component={Link} to='/logout'>
+            <ListItem button onClick={handleLogout}>
               <ListItemIcon>
                 <LogoutIcon style={{ color: 'white' }} />
               </ListItemIcon>

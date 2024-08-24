@@ -4,26 +4,33 @@ import { LoginData } from '../pages/login/types';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToast } from '@redux/toast.slice';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const loginFunction = async (data: LoginData) => {
   try {
     const response = await axios.post(
-      'https://8813-2405-201-580b-884-c879-465c-bf2f-a675.ngrok-free.app/auth/login',
+      `http://localhost:3001/admin/login`,
       data
     );
     return response.data;
   } catch (err) {
-    throw Error;
+    console.log(err);
+    throw Error('Login failed');
   }
 };
 
 export const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [token, setToken] = useLocalStorage<string | null>('jwtToken', null);
+
   return useMutation({
     mutationFn: loginFunction,
-    onSuccess: async () => {
-      console.log("I'm first!");
+    onSuccess: async (data) => {
+      console.log('Login successful!');
+
+      setToken(data.data);
+
       dispatch(
         addToast({
           id: new Date().getTime(),
@@ -31,10 +38,10 @@ export const useLogin = () => {
           message: 'User logged in successfully',
         })
       );
-      navigate('/');
+      navigate('/dashboard');
     },
     onSettled: async () => {
-      console.log("I'm second!");
+      console.log('Mutation settled.');
     },
   });
 };

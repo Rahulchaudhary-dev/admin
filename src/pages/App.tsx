@@ -8,7 +8,6 @@ import StatusAlert from '../components/toast';
 import AuthProviderWrapper from '../components/auth-provider';
 import ProtectedRoute from '../routes/private-routes';
 import Login from './login';
-import { DashboardLayout } from '@components/layout';
 import ProductList from './productList';
 import AddProduct from './addProduct';
 

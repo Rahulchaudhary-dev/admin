@@ -13,7 +13,8 @@ import {
   Avatar,
 } from '@mui/material';
 import { DashboardLayout } from '@components/layout';
-import axios from 'axios';
+import { useAddProduct } from '@hooks/useAddProduct';
+import { useUploadImage } from '@hooks/useUploadImage';
 
 const schema = yup.object().shape({
   name: yup.string().required('Product name is required'),
@@ -42,63 +43,27 @@ const AddProduct = () => {
   });
 
   const [imageId, setImageId] = useState('');
-  const [imagePreview, setImagePreview] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { mutate: addProduct } = useAddProduct();
+  const { mutate: uploadImage, isLoading: uploadingImage } = useUploadImage();
 
-  const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!file) return;
 
     setImagePreview(URL.createObjectURL(file));
 
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      setUploading(true);
-
-      const response = await axios.post('/api/upload-image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      const { data } = response;
-      if (data && data.image_id) {
-        setImageId(data.image_id);
-        alert('Image uploaded successfully');
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Failed to upload image');
-    } finally {
-      setUploading(false);
-    }
+    uploadImage(file, {
+      onSuccess: (data) => {
+        if (data && data.image_id) {
+          setImageId(data.image_id);
+        }
+      },
+    });
   };
 
-  const onSubmit = async (data) => {
-    if (!imageId) {
-      alert('Please upload an image before submitting.');
-      return;
-    }
-
-    const formData = {
-      ...data,
-      image_id: imageId,
-    };
-
-    try {
-      const response = await axios.post('/api/products', formData);
-      if (response.status === 200) {
-        alert('Product added successfully');
-        reset();
-        setImageId('');
-        setImagePreview(null);
-      }
-    } catch (error) {
-      console.error('Error adding product:', error);
-      alert('Failed to add product');
-    }
+  const onSubmit = async (data: any) => {
+    addProduct(data);
   };
 
   return (
@@ -107,8 +72,13 @@ const AddProduct = () => {
         elevation={3}
         sx={{
           p: 4,
-          maxWidth: '50%',
           boxShadow: 'none',
+          '@media (max-width: 1200px)': {
+            maxWidth: '100%',
+          },
+          '@media (min-width: 1200px) and (max-width: 3000px)': {
+            maxWidth: '50%',
+          },
         }}
       >
         <Typography variant='h4' gutterBottom>
@@ -165,9 +135,13 @@ const AddProduct = () => {
                     backgroundColor: '#00BFFF',
                   },
                 }}
-                disabled={uploading}
+                disabled={uploadingImage}
               >
-                {uploading ? <CircularProgress size={24} /> : 'Upload Image'}
+                {uploadingImage ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  'Upload Image'
+                )}
                 <input
                   type='file'
                   hidden
