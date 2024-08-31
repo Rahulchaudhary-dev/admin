@@ -6,8 +6,7 @@ import { addToast } from '@redux/toast.slice';
 
 const uploadImage = async (file: File, authToken: string) => {
   const formData = new FormData();
-  formData.append('file', file);
-
+  formData.append('image', file);
   try {
     const response = await axios.post(
       'http://localhost:3001/admin/product/image',
@@ -20,7 +19,7 @@ const uploadImage = async (file: File, authToken: string) => {
       }
     );
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error('Error uploading image:', error);
     throw new Error('Failed to upload image');

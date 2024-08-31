@@ -9,7 +9,7 @@ export const AppMainWrapperDiv = styled('div')({
   minHeight: '100vh',
   backgroundColor: '#191a1a',
   backgroundImage:
-    'url(https://img.freepik.com/free-vector/abstract-digital-grid-vector-black-background_53876-111550.jpg?t=st=1723747690~exp=1723751290~hmac=02a46719e37d20ce9b0909d2e6a79637e0bc7836b74152820697dc5a90ac263b&w=1380)',
+    'url(https://img.freepik.com/free-vector/5g-networking-technology-background-with-blue-digital-line_53876-119505.jpg?size=626&ext=jpg&ga=GA1.1.1472061257.1723747564&semt=ais_hybrid)',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',

@@ -23,10 +23,10 @@ const fetchProductList = async (token: string): Promise<Product[]> => {
         },
       }
     );
-    return response.data || [];
-  } catch (err) {
+    return response.data?.data || [];
+  } catch (err: any) {
     console.error(err);
-    throw new Error('Failed to fetch product list');
+    throw new Error(err.response.data.message);
   }
 };
 
@@ -37,7 +37,7 @@ export const useProductList = (): UseQueryResult<Product[], Error> => {
   const options: UseQueryOptions<Product[], Error> = {
     queryKey: ['productList', authToken],
     queryFn: () => fetchProductList(authToken),
-    onSuccess: (data) => {
+    onSuccess: () => {
       dispatch(
         addToast({
           id: new Date().getTime(),
@@ -46,13 +46,12 @@ export const useProductList = (): UseQueryResult<Product[], Error> => {
         })
       );
     },
-    onError: (error) => {
-      console.error('Error fetching product list:', error);
+    onError: (error: Error) => {
       dispatch(
         addToast({
           id: new Date().getTime(),
           type: 'error',
-          message: 'Failed to fetch product list',
+          message: error.message,
         })
       );
     },

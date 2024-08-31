@@ -17,8 +17,8 @@ const addProduct = async (data: any, token: string) => {
       }
     );
     return response.data;
-  } catch (err) {
-    throw new Error('Product addition failed');
+  } catch (err: any) {
+    throw new Error(err.response.data.message);
   }
 };
 

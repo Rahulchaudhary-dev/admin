@@ -13,16 +13,15 @@ const loginFunction = async (data: LoginData) => {
       data
     );
     return response.data;
-  } catch (err) {
-    console.log(err);
-    throw Error('Login failed');
+  } catch (err: any) {
+    throw Error(err.response.data.message);
   }
 };
 
 export const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [token, setToken] = useLocalStorage<string | null>('jwtToken', null);
+  const [_, setToken] = useLocalStorage<string | null>('jwtToken', null);
 
   return useMutation({
     mutationFn: loginFunction,
@@ -39,6 +38,15 @@ export const useLogin = () => {
         })
       );
       navigate('/dashboard');
+    },
+    onError: (error) => {
+      dispatch(
+        addToast({
+          id: new Date().getTime(),
+          type: 'error',
+          message: error.message || 'Error login user',
+        })
+      );
     },
     onSettled: async () => {
       console.log('Mutation settled.');
