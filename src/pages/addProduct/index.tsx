@@ -33,6 +33,26 @@ const schema = yup.object().shape({
     .date()
     .required('Auction time is required')
     .typeError('Invalid date format (use YYYY/MM/DD)'),
+  description: yup.string().required('Description is required'),
+  contract_address: yup.string().required('Contract address is required'),
+  abi_json: yup
+    .string()
+    .test(
+      'is-json',
+      'ABI JSON must be a valid JSON array of objects',
+      (value) => {
+        try {
+          const parsedValue = JSON.parse(value || '');
+          return (
+            Array.isArray(parsedValue) &&
+            parsedValue.every((obj) => typeof obj === 'object')
+          );
+        } catch (error) {
+          return false;
+        }
+      }
+    )
+    .required('ABI JSON is required'),
   tasks: yup.array().of(
     yup.object().shape({
       task_name: yup.string().required('Task name is required'),
@@ -50,7 +70,6 @@ const AddProduct = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     control,
   } = useForm({
     resolver: yupResolver(schema),
@@ -77,11 +96,11 @@ const AddProduct = () => {
     setImagePreview(URL.createObjectURL(file));
     uploadImage(file);
   };
-  console.log('imageUploadResponse', imageUploadResponse);
 
   const onSubmit = async (data: any) => {
     const finalData = {
       ...data,
+      abi_json: JSON.parse(data.abi_json), // Convert ABI JSON string to array
       image_id: imageUploadResponse?.id,
     };
     addProduct(finalData);
@@ -133,7 +152,6 @@ const AddProduct = () => {
                 }
               />
             </Grid>
-
             <Grid item xs={12} sm={6}>
               <TextField
                 label='Total Tokens'
@@ -147,7 +165,6 @@ const AddProduct = () => {
                 }
               />
             </Grid>
-
             <Grid item xs={12}>
               <TextField
                 label='Auction Time'
@@ -236,6 +253,55 @@ const AddProduct = () => {
             </Grid>
 
             <Grid item xs={12}>
+              <TextField
+                label='Description'
+                fullWidth
+                variant='outlined'
+                {...register('description')}
+                error={!!errors.description}
+                helperText={
+                  errors.description ? String(errors.description.message) : ''
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label='Contract Address'
+                fullWidth
+                variant='outlined'
+                {...register('contract_address')}
+                error={!!errors.contract_address}
+                helperText={
+                  errors.contract_address
+                    ? String(errors.contract_address.message)
+                    : ''
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant='h6' gutterBottom>
+                ABI JSON
+              </Typography>
+              <TextField
+                label='ABI JSON'
+                multiline
+                fullWidth
+                rows={4}
+                variant='outlined'
+                {...register('abi_json')}
+                error={!!errors.abi_json}
+                helperText={
+                  errors.abi_json
+                    ? String(errors.abi_json.message)
+                    : 'Paste the ABI JSON here'
+                }
+              />
+            </Grid>
+
+            {/* Submit button */}
+            <Grid item xs={12}>
               <Button
                 type='submit'
                 variant='contained'
@@ -254,6 +320,7 @@ const AddProduct = () => {
             </Grid>
           </Grid>
         </Box>
+
         <Grid item lg={12}>
           <Typography variant='subtitle1' gutterBottom>
             Upload Product Image
