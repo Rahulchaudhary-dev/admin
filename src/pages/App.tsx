@@ -10,6 +10,7 @@ import ProtectedRoute from '../routes/private-routes';
 import Login from './login';
 import ProductList from './productList';
 import AddProduct from './addProduct';
+import UserList from './userList';
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -64,6 +65,16 @@ const App = () => {
         </ProtectedRoute>
       ),
       id: 'AddProduct',
+      errorElement: <ErrorBoundary />,
+    },
+    {
+      path: '/user-list',
+      element: (
+        <ProtectedRoute>
+          <UserList />
+        </ProtectedRoute>
+      ),
+      id: 'UserList',
       errorElement: <ErrorBoundary />,
     },
   ];

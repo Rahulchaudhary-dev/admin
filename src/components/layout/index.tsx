@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   AppBar,
@@ -90,6 +89,12 @@ export const DashboardLayout = ({ children }: any) => {
                 <AddIcon style={{ color: 'white' }} />
               </ListItemIcon>
               <ListItemText primary='Add Product' />
+            </ListItem>
+            <ListItem button component={Link} to='/user-list'>
+              <ListItemIcon>
+                <AddIcon style={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='User List' />
             </ListItem>
             <ListItem button onClick={handleLogout}>
               <ListItemIcon>
