@@ -36,7 +36,7 @@ export const useGetUserList = (): UseQueryResult<user[], Error> => {
   const [authToken] = useLocalStorage<string>('jwtToken', '');
 
   const options: UseQueryOptions<user[], Error> = {
-    queryKey: ['userList', authToken],
+    queryKey: ['userList'],
     queryFn: () => fetchUserList(authToken),
     onSuccess: () => {
       dispatch(

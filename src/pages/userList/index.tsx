@@ -26,7 +26,7 @@ import { useGetUserDetails } from '@hooks/useGetUserDetails';
 import { useChangeStatus } from '@hooks/useChangeStatus';
 
 const UserList = () => {
-  const { data: users = [], isLoading: loading } = useGetUserList();
+  const { data: users = [], isLoading: loading, refetch } = useGetUserList();
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [userStatus, setUserStatus] = useState('');
 
@@ -36,8 +36,11 @@ const UserList = () => {
     isPending: userDetailsLoading,
   } = useGetUserDetails();
 
-  const { mutate: updateUserStatus, isPending: statusUpdateLoading } =
-    useChangeStatus();
+  const {
+    mutate: updateUserStatus,
+    isSuccess,
+    isPending: statusUpdateLoading,
+  } = useChangeStatus();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -58,6 +61,12 @@ const UserList = () => {
   }, [selectedUserId]);
 
   useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
     if (userDetailsresponse && userDetailsresponse.length) {
       setUserStatus(userDetailsresponse[0].account_status);
     }
@@ -76,7 +85,7 @@ const UserList = () => {
     <DashboardLayout>
       <Box sx={{ width: '100%' }}>
         <Typography variant='h4' gutterBottom>
-          Product List
+          User List
         </Typography>
 
         {loading ? (

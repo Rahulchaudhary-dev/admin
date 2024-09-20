@@ -92,7 +92,7 @@ export const DashboardLayout = ({ children }: any) => {
             </ListItem>
             <ListItem button component={Link} to='/user-list'>
               <ListItemIcon>
-                <AddIcon style={{ color: 'white' }} />
+                <ListIcon style={{ color: 'white' }} />
               </ListItemIcon>
               <ListItemText primary='User List' />
             </ListItem>

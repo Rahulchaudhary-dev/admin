@@ -8,15 +8,14 @@ import { useDispatch } from 'react-redux';
 import { addToast } from '@redux/toast.slice';
 import useLocalStorage from '../hooks/useLocalStorage';
 
-const changeStatus = async (
-  token: string,
-  data: {
-    user_id: string;
-    status: number;
-  }
-) => {
+type ChangeStatusData = {
+  user_id: string;
+  status: number;
+};
+
+const changeStatus = async (token: string, data: ChangeStatusData) => {
   try {
-    const response = await axios.patch(
+    const response = await axios.put(
       `http://localhost:3001/admin/user/status`,
       { ...data },
       {
@@ -28,23 +27,27 @@ const changeStatus = async (
     return response.data || [];
   } catch (err: any) {
     console.error(err);
-    throw new Error(err.response.data.message);
+    throw new Error(err.response?.data?.message || 'Failed to update status');
   }
 };
 
-export const useChangeStatus = (): UseMutationResult<any, Error, string> => {
+export const useChangeStatus = (): UseMutationResult<
+  any,
+  Error,
+  ChangeStatusData
+> => {
   const dispatch = useDispatch();
   const [authToken] = useLocalStorage<string>('jwtToken', '');
 
-  const options: UseMutationOptions<any, Error, string> = {
-    mutationFn: (data: any) => changeStatus(authToken, data),
+  const options: UseMutationOptions<any, Error, ChangeStatusData> = {
+    mutationFn: (data: ChangeStatusData) => changeStatus(authToken, data),
     onSuccess: (data: any) => {
-      if (data.success) {
+      if (data.statusCode === 200) {
         dispatch(
           addToast({
             id: new Date().getTime(),
             type: 'success',
-            message: 'status updated successfully',
+            message: 'Status updated successfully',
           })
         );
       } else {
@@ -52,12 +55,12 @@ export const useChangeStatus = (): UseMutationResult<any, Error, string> => {
           addToast({
             id: new Date().getTime(),
             type: 'error',
-            message: data.message,
+            message: data.message || 'Failed to update status',
           })
         );
       }
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       dispatch(
         addToast({
           id: new Date().getTime(),
