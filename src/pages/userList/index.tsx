@@ -93,41 +93,49 @@ const UserList = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <TableContainer
-            component={Paper}
-            sx={{
-              width: '100%',
-              mx: 'auto',
-              mt: 3,
-            }}
-          >
-            <Table>
-              <TableHead sx={{ backgroundColor: '#353535' }}>
-                <TableRow>
-                  <TableCell sx={{ color: 'white' }}>S.No</TableCell>
-                  <TableCell sx={{ color: 'white' }}>Address</TableCell>
-                  <TableCell sx={{ color: 'white' }}>Status</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users?.list?.length &&
-                  users?.list.map((user, index) => (
-                    <TableRow
-                      key={user.id}
-                      hover
-                      onClick={() => handleRowClick(user)}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{user.address}</TableCell>
-                      <TableCell>
-                        {user.account_status === 1 ? 'Active' : 'De-Active'}
-                      </TableCell>
+          <>
+            {!loading && !users?.list?.length ? (
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                No data Found
+              </div>
+            ) : (
+              <TableContainer
+                component={Paper}
+                sx={{
+                  width: '100%',
+                  mx: 'auto',
+                  mt: 3,
+                }}
+              >
+                <Table>
+                  <TableHead sx={{ backgroundColor: '#353535' }}>
+                    <TableRow>
+                      <TableCell sx={{ color: 'white' }}>S.No</TableCell>
+                      <TableCell sx={{ color: 'white' }}>Address</TableCell>
+                      <TableCell sx={{ color: 'white' }}>Status</TableCell>
                     </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {users?.list?.length &&
+                      users?.list.map((user, index) => (
+                        <TableRow
+                          key={user.id}
+                          hover
+                          onClick={() => handleRowClick(user)}
+                          sx={{ cursor: 'pointer' }}
+                        >
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{user.address}</TableCell>
+                          <TableCell>
+                            {user.account_status === 1 ? 'Active' : 'De-Active'}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </>
         )}
 
         <Drawer

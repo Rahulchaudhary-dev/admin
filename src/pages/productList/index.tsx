@@ -59,48 +59,58 @@ const ProductList = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <TableContainer
-            component={Paper}
-            sx={{
-              width: '100%',
-              mx: 'auto',
-              mt: 3,
-            }}
-          >
-            <Table>
-              <TableHead sx={{ backgroundColor: '#353535' }}>
-                <TableRow>
-                  <TableCell sx={{ color: 'white' }}>Image</TableCell>
-                  <TableCell sx={{ color: 'white' }}>Name</TableCell>
-                  <TableCell sx={{ color: 'white' }}>Total Tokens</TableCell>
-                  <TableCell sx={{ color: 'white' }}>Total Tasks</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {products?.length &&
-                  products.map((product) => (
-                    <TableRow
-                      key={product.id}
-                      hover
-                      onClick={() => handleRowClick(product)}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      <TableCell>
-                        <Avatar
-                          alt={product.name}
-                          src={product.ProductImages[0]?.file_url}
-                          variant='rounded'
-                          sx={{ width: 56, height: 56 }}
-                        />
+          <>
+            {!loading && !products?.length ? (
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                No data Found
+              </div>
+            ) : (
+              <TableContainer
+                component={Paper}
+                sx={{
+                  width: '100%',
+                  mx: 'auto',
+                  mt: 3,
+                }}
+              >
+                <Table>
+                  <TableHead sx={{ backgroundColor: '#353535' }}>
+                    <TableRow>
+                      <TableCell sx={{ color: 'white' }}>Image</TableCell>
+                      <TableCell sx={{ color: 'white' }}>Name</TableCell>
+                      <TableCell sx={{ color: 'white' }}>
+                        Total Tokens
                       </TableCell>
-                      <TableCell>{product.name}</TableCell>
-                      <TableCell>{product.total_token}</TableCell>
-                      <TableCell>{product.total_tasks}</TableCell>
+                      <TableCell sx={{ color: 'white' }}>Total Tasks</TableCell>
                     </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {products?.length > 0 &&
+                      products.map((product) => (
+                        <TableRow
+                          key={product.id}
+                          hover
+                          onClick={() => handleRowClick(product)}
+                          sx={{ cursor: 'pointer' }}
+                        >
+                          <TableCell>
+                            <Avatar
+                              alt={product.name}
+                              src={product.ProductImages[0]?.file_url}
+                              variant='rounded'
+                              sx={{ width: 56, height: 56 }}
+                            />
+                          </TableCell>
+                          <TableCell>{product.name}</TableCell>
+                          <TableCell>{product.total_token}</TableCell>
+                          <TableCell>{product.total_tasks}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </>
         )}
 
         <Drawer

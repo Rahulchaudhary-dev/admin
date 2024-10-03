@@ -19,14 +19,14 @@ import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
-// Map of route paths to dynamic headings
 const pageTitles = {
   '/product-list': 'Product List',
   '/add-product': 'Add Product',
+  '/user-list': 'User List',
+  '/partners-list': 'Partner List',
   '/logout': 'Logout',
 };
 
-// Dashboard Layout Component that accepts children
 export const DashboardLayout = ({ children }: any) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,20 +37,18 @@ export const DashboardLayout = ({ children }: any) => {
     navigate('/');
   };
 
-  // Get the dynamic title based on the current route, default to "Dashboard"
   const currentPageTitle = pageTitles[location.pathname] || 'Dashboard';
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
 
-      {/* Top App Bar with dynamic title */}
       <AppBar
         position='fixed'
         sx={{
           width: `calc(100% - ${drawerWidth}px)`,
           ml: `${drawerWidth}px`,
-          backgroundColor: '#353535', // Silver background color for AppBar
+          backgroundColor: '#353535',
         }}
       >
         <Toolbar>
@@ -69,7 +67,7 @@ export const DashboardLayout = ({ children }: any) => {
             width: drawerWidth,
             boxSizing: 'border-box',
             backgroundColor: '#353535',
-            color: 'white', // Silver background color for Sidebar
+            color: 'white',
           },
         }}
         variant='permanent'
@@ -96,6 +94,12 @@ export const DashboardLayout = ({ children }: any) => {
               </ListItemIcon>
               <ListItemText primary='User List' />
             </ListItem>
+            <ListItem button component={Link} to='/partner-list'>
+              <ListItemIcon>
+                <ListIcon style={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Partner List' />
+            </ListItem>
             <ListItem button onClick={handleLogout}>
               <ListItemIcon>
                 <LogoutIcon style={{ color: 'white' }} />
@@ -106,7 +110,6 @@ export const DashboardLayout = ({ children }: any) => {
         </Box>
       </Drawer>
 
-      {/* Main content where children components will be rendered */}
       <Box
         component='main'
         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}

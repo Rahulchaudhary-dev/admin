@@ -11,6 +11,7 @@ import Login from './login';
 import ProductList from './productList';
 import AddProduct from './addProduct';
 import UserList from './userList';
+import PartnersList from './partnersList';
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -75,6 +76,16 @@ const App = () => {
         </ProtectedRoute>
       ),
       id: 'UserList',
+      errorElement: <ErrorBoundary />,
+    },
+    {
+      path: '/partner-list',
+      element: (
+        <ProtectedRoute>
+          <PartnersList />
+        </ProtectedRoute>
+      ),
+      id: 'partnerList',
       errorElement: <ErrorBoundary />,
     },
   ];
