@@ -23,7 +23,7 @@ const pageTitles = {
   '/product-list': 'Product List',
   '/add-product': 'Add Product',
   '/user-list': 'User List',
-  '/partners-list': 'Partner List',
+  '/partner-list': 'Partner List',
   '/logout': 'Logout',
 };
 

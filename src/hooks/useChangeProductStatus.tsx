@@ -8,43 +8,46 @@ import { useDispatch } from 'react-redux';
 import { addToast } from '@redux/toast.slice';
 import useLocalStorage from '../hooks/useLocalStorage';
 
-const getPartnerDetails = async (
-  token: string,
-  PartnerId: string
-): Promise<any> => {
+type ChangeStatusData = {
+  user_id: string;
+  status: number;
+};
+
+const changeStatus = async (token: string, data: ChangeStatusData) => {
   try {
-    const response = await axios.get<any>(
-      `http://localhost:3001/admin/partner/${PartnerId}`,
+    const response = await axios.put(
+      `http://localhost:3001/admin/product/status`,
+      { ...data },
       {
         headers: {
           Authorization: token,
         },
       }
     );
-    return response.data.data.list.Product || [];
+    return response.data || [];
   } catch (err: any) {
     console.error(err);
-    throw new Error(err.response.data.message);
+    throw new Error(err.response?.data?.message || 'Failed to update status');
   }
 };
 
-export const useGetPartnerDetails = (): UseMutationResult<
+export const useChangeProductStatus = (): UseMutationResult<
   any,
   Error,
-  string
+  ChangeStatusData
 > => {
   const dispatch = useDispatch();
   const [authToken] = useLocalStorage<string>('jwtToken', '');
 
-  const options: UseMutationOptions<any, Error, string> = {
-    mutationFn: (PartnerId: string) => getPartnerDetails(authToken, PartnerId),
+  const options: UseMutationOptions<any, Error, ChangeStatusData> = {
+    mutationFn: (data: ChangeStatusData) => changeStatus(authToken, data),
     onSuccess: (data: any) => {
-      if (data.success) {
+      if (data.statusCode === 200) {
         dispatch(
           addToast({
             id: new Date().getTime(),
             type: 'success',
-            message: 'Partner details fetched successfully',
+            message: 'Status updated successfully',
           })
         );
       } else {
@@ -52,12 +55,12 @@ export const useGetPartnerDetails = (): UseMutationResult<
           addToast({
             id: new Date().getTime(),
             type: 'error',
-            message: data.message,
+            message: data.message || 'Failed to update status',
           })
         );
       }
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       dispatch(
         addToast({
           id: new Date().getTime(),

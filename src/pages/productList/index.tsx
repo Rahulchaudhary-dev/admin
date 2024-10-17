@@ -14,21 +14,33 @@ import {
   Drawer,
   IconButton,
   Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { DashboardLayout } from '@components/layout';
 import { useProductList } from '@hooks/useProductList';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGetProductDetails } from '@hooks/useGetProductDetails';
 import CircularCustomLoader from '@components/loaders/circular-custom-loader';
+import { useChangeProductStatus } from '@hooks/useChangeProductStatus';
 
 const ProductList = () => {
   const { data: products = [], isLoading: loading } = useProductList();
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [userStatus, setUserStatus] = useState('');
   const {
     mutate: getProductDetails,
     data: productDetailsresponse,
     isPending: productDetailsLoading,
   } = useGetProductDetails();
+
+  const {
+    mutate: updateUserStatus,
+    isSuccess,
+    isPending: statusUpdateLoading,
+  } = useChangeProductStatus();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -40,6 +52,15 @@ const ProductList = () => {
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
     setSelectedProductId(null);
+  };
+
+  const handleStatusChange = (event: any) => {
+    const newStatus = event.target.value;
+    console.log('newStatus', newStatus);
+    setUserStatus(newStatus);
+    if (selectedProductId) {
+      updateUserStatus({ user_id: selectedProductId, status: newStatus });
+    }
   };
 
   useEffect(() => {
@@ -78,10 +99,9 @@ const ProductList = () => {
                     <TableRow>
                       <TableCell sx={{ color: 'white' }}>Image</TableCell>
                       <TableCell sx={{ color: 'white' }}>Name</TableCell>
-                      <TableCell sx={{ color: 'white' }}>
-                        Total Tokens
-                      </TableCell>
+                      <TableCell sx={{ color: 'white' }}>Max supply</TableCell>
                       <TableCell sx={{ color: 'white' }}>Total Tasks</TableCell>
+                      <TableCell sx={{ color: 'white' }}>Status</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -102,8 +122,11 @@ const ProductList = () => {
                             />
                           </TableCell>
                           <TableCell>{product.name}</TableCell>
-                          <TableCell>{product.total_token}</TableCell>
+                          <TableCell>{product.max_supply}</TableCell>
                           <TableCell>{product.total_tasks}</TableCell>
+                          <TableCell>
+                            {product?.status === 1 ? 'Active' : 'Inactive'}
+                          </TableCell>
                         </TableRow>
                       ))}
                   </TableBody>
@@ -165,14 +188,52 @@ const ProductList = () => {
                         gap: '40px',
                       }}
                     >
-                      <Typography variant='body2' color='textSecondary'>
-                        <span style={{ fontWeight: 700 }}>Total Tokens:</span>
-                        {productDetailsresponse.total_token}
-                      </Typography>
-                      <Typography variant='body2' color='textSecondary'>
-                        <span style={{ fontWeight: 700 }}>Total Tasks:</span>
-                        {productDetailsresponse.total_tasks}
-                      </Typography>
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          width: '100%',
+                          justifyContent: 'flex-start',
+                          gap: '5px',
+                        }}
+                      >
+                        <Typography variant='body2' color='textSecondary'>
+                          <span style={{ fontWeight: 700 }}>Total Tokens:</span>
+                          {productDetailsresponse?.total_token}
+                        </Typography>
+                        <Typography variant='body2' color='textSecondary'>
+                          <span style={{ fontWeight: 700 }}>Total Tasks:</span>
+                          {productDetailsresponse?.total_tasks}
+                        </Typography>
+                        <Typography variant='body2' color='textSecondary'>
+                          <span style={{ fontWeight: 700 }}>Max User:</span>
+                          {productDetailsresponse?.max_user}
+                        </Typography>
+                        <Typography variant='body2' color='textSecondary'>
+                          <span style={{ fontWeight: 700 }}>Max Supply:</span>
+                          {productDetailsresponse?.max_supply}
+                        </Typography>
+                        <Typography variant='body2' color='textSecondary'>
+                          <span style={{ fontWeight: 700 }}>
+                            Total Token User:
+                          </span>
+                          {productDetailsresponse?.total_token_user}
+                        </Typography>
+                      </div>
+                      <FormControl fullWidth sx={{ mb: 2, width: '200px' }}>
+                        <InputLabel id='status-select-label'>Status</InputLabel>
+                        <Select
+                          labelId='status-select-label'
+                          id='status-select'
+                          value={userStatus}
+                          label='Status'
+                          onChange={handleStatusChange}
+                          disabled={statusUpdateLoading}
+                        >
+                          <MenuItem value={1}>Active</MenuItem>
+                          <MenuItem value={0}>De-Active</MenuItem>
+                        </Select>
+                      </FormControl>
                     </div>
 
                     <Typography
