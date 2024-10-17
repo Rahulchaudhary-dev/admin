@@ -16,7 +16,7 @@ interface Partners {
 
 const fetchPartnersList = async (token: string): Promise<Product[]> => {
   try {
-    const response = await axios.get<Product[]>(
+    const response:any = await axios.get<Product[]>(
       'http://localhost:3001/admin/partners/list',
       {
         headers: {
@@ -24,7 +24,7 @@ const fetchPartnersList = async (token: string): Promise<Product[]> => {
         },
       }
     );
-    return response.data?.data || [];
+    return response.data?.data?.list || [];
   } catch (err: any) {
     console.error(err);
     throw new Error(err.response.data.message);

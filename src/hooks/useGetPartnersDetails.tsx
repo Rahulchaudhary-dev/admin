@@ -26,7 +26,7 @@ const getPartnerDetails = async (
         },
       }
     );
-    return response.data.data.getPartner || [];
+    return response.data.data.list.Product || [];
   } catch (err: any) {
     console.error(err);
     throw new Error(err.response.data.message);

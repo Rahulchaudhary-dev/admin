@@ -49,7 +49,7 @@ const PartnersList = () => {
   }, [selectedPartnerId, getPartnerDetails]);
 
   // Safely extract the list from the response
-  const partnersList = partnerDetailsResponse?.data?.list || [];
+  const partnersList:any = partnerDetailsResponse || [];
 
   return (
     <DashboardLayout>
@@ -129,9 +129,10 @@ const PartnersList = () => {
               <CircularCustomLoader />
             ) : (
               <>
-                {partnersList.length > 0 ? (
-                  partnersList.map((partner, userIndex) => (
-                    <Box key={partner.id} sx={{ mb: 4 }}>
+             
+                {/* {partnersList.length > 0 ? ( */}
+                  {/* // partnersList.map((partner, userIndex) => ( */}
+                    <Box sx={{ mb: 4 }}>
                       <Box
                         sx={{
                           display: 'flex',
@@ -139,20 +140,20 @@ const PartnersList = () => {
                           mb: 2,
                         }}
                       >
-                        {partner.Product.ProductImages.length > 0 && (
+                        {partnersList?.ProductImages?.length > 0 && (
                           <Avatar
-                            src={partner.Product.ProductImages[0].file_path}
-                            alt={partner.Product.name}
-                            sx={{ width: 56, height: 56, mr: 2 }}
+                            src={"http://localhost:3001/"+partnersList?.ProductImages[0].file_path}
+                            alt={partnersList.name}
+                            sx={{ width: 56, height: 56, mr: 2}}
                           />
                         )}
                         <Typography variant='h6' sx={{ fontWeight: 700 }}>
-                          {partner.email}
+                          {partnersList.email}
                         </Typography>
                       </Box>
 
                       <Typography variant='body1' sx={{ mb: 1 }}>
-                        <strong>Mobile No:</strong> {partner.mobile_no}
+                        <strong>Mobile No:</strong> {partnersList.mobile_no}
                       </Typography>
 
                       <Box sx={{ mt: 2 }}>
@@ -164,22 +165,22 @@ const PartnersList = () => {
                           Product Details
                         </Typography>
                         <Typography variant='body1'>
-                          <strong>Name:</strong> {partner.Product.name}
+                          <strong>Name:</strong> {partnersList.name}
                         </Typography>
                         <Typography variant='body1'>
                           <strong>Max Supply:</strong>{' '}
-                          {partner.Product.max_supply}
+                          {partnersList.max_supply}
                         </Typography>
                         <Typography variant='body1'>
-                          <strong>Max User:</strong> {partner.Product.max_user}
+                          <strong>Max User:</strong> {partnersList.max_user}
                         </Typography>
                         <Typography variant='body1'>
                           <strong>Total Tasks:</strong>{' '}
-                          {partner.Product.total_tasks}
+                          {partnersList.total_tasks}
                         </Typography>
                         <Typography variant='body1'>
                           <strong>Total Token User:</strong>{' '}
-                          {partner.Product.total_token_user}
+                          {partnersList.total_token_user}
                         </Typography>
                       </Box>
 
@@ -222,7 +223,7 @@ const PartnersList = () => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {partner.Product.Tasks.map((task, taskIndex) => (
+                              {partnersList?.Tasks?.map((task, taskIndex) => (
                                 <TableRow key={taskIndex}>
                                   <TableCell>{task.task_name}</TableCell>
                                   <TableCell sx={{ textAlign: 'center' }}>
@@ -240,12 +241,12 @@ const PartnersList = () => {
                         </TableContainer>
                       </Box>
                     </Box>
-                  ))
-                ) : (
+                  {/* )) */}
+                {/* ) : (
                   <Typography variant='body1' color='textSecondary'>
                     No users found.
                   </Typography>
-                )}
+                )} */}
               </>
             )}
           </Box>
