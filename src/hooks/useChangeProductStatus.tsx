@@ -9,7 +9,7 @@ import { addToast } from '@redux/toast.slice';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 type ChangeStatusData = {
-  user_id: string;
+  product_id: string;
   status: number;
 };
 

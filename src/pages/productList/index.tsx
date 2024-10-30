@@ -59,7 +59,7 @@ const ProductList = () => {
     console.log('newStatus', newStatus);
     setUserStatus(newStatus);
     if (selectedProductId) {
-      updateUserStatus({ user_id: selectedProductId, status: newStatus });
+      updateUserStatus({ product_id: selectedProductId, status: newStatus });
     }
   };
 
@@ -197,21 +197,21 @@ const ProductList = () => {
                           gap: '5px',
                         }}
                       >
-                        <Typography variant='body2' color='textSecondary'>
+                        {/* <Typography variant='body2' color='textSecondary'>
                           <span style={{ fontWeight: 700 }}>Total Tokens:</span>
                           {productDetailsresponse?.total_token}
-                        </Typography>
+                        </Typography> */}
                         <Typography variant='body2' color='textSecondary'>
-                          <span style={{ fontWeight: 700 }}>Total Tasks:</span>
-                          {productDetailsresponse?.total_tasks}
+                          <span style={{ fontWeight: 700 }}>Max Supply:</span>
+                          {productDetailsresponse?.max_supply}
                         </Typography>
                         <Typography variant='body2' color='textSecondary'>
                           <span style={{ fontWeight: 700 }}>Max User:</span>
                           {productDetailsresponse?.max_user}
                         </Typography>
                         <Typography variant='body2' color='textSecondary'>
-                          <span style={{ fontWeight: 700 }}>Max Supply:</span>
-                          {productDetailsresponse?.max_supply}
+                          <span style={{ fontWeight: 700 }}>Total Tasks:</span>
+                          {productDetailsresponse?.total_tasks}
                         </Typography>
                         <Typography variant='body2' color='textSecondary'>
                           <span style={{ fontWeight: 700 }}>

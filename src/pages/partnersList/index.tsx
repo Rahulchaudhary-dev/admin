@@ -140,7 +140,6 @@ const PartnersList = () => {
                     {partnersList?.ProductImages?.length > 0 && (
                       <Avatar
                         src={
-                          'http://localhost:3001/' +
                           partnersList?.ProductImages[0].file_path
                         }
                         alt={partnersList.name}
